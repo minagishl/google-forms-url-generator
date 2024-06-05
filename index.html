@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Forms URL Generator</title>
+    <style>
+        .button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Google Forms URL Generator</h1>
+    <label for="formurl">Form URL:</label>
+    <input type="text" id="formurl" placeholder="Enter Form URL" required>
+    <br><br>
+    <label for="number">Number (1-10):</label>
+    <input type="number" id="number" min="1" max="10" required>
+    <br><br>
+    <button class="button" onclick="generateUrl()">Generate URL</button>
+    <br><br>
+    <input type="text" id="generatedUrl" readonly>
+    <br><br>
+    <button class="button" onclick="copyUrl()">Copy URL</button>
+    <button class="button" onclick="openUrl()">Open URL</button>
+
+    <script>
+        function generateUrl() {
+            const formurl = document.getElementById('formurl').value;
+            const number = document.getElementById('number').value;
+
+            if (!formurl || !number) {
+                alert('Please enter Form URL and Number');
+                return;
+            }
+
+            if (!formurl.match(/https:\/\/docs.google.com\/forms\/d\/e\/[a-zA-Z0-9_-]+/)) {
+                alert('Invalid Form URL');
+                return;
+            }
+
+            const url = formurl.replace(/\/d\/e\//, `/u/${number}/d/e/`);
+            document.getElementById('generatedUrl').value = url;
+        }
+
+        function copyUrl() {
+            const urlField = document.getElementById('generatedUrl');
+            urlField.select();
+            document.execCommand('copy');
+            alert('URL copied to clipboard');
+        }
+
+        function openUrl() {
+            const url = document.getElementById('generatedUrl').value;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
